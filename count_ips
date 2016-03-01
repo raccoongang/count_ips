@@ -5,18 +5,18 @@ Module destinated for determining a count of users, who visited site in specifie
     from nginx logs.
 
 You must specify args:
-    -f - file (gz format)
-    -to - to time HH:MM
-    -from - time from HH:MM
+    --file - file (gz format)
+    --to - to time HH:MM
+    --from - time from HH:MM
     --show-ip - shows list of ips
 
 Example of usage:
     
-    python count_ips.py -f <filename.gz> -from 12:00 -to 19:00 --show-ip
+    python count_ips -f <filename.gz> -from 12:00 -to 19:00 --show-ip
 
     or
 
-    python count_ips.py -f <filename.gz>
+    python count_ips -f <filename.gz>
 
 """
 
@@ -45,20 +45,20 @@ if len(args) == 1 or '--help' in args:
 	sys.exit()
 
 try:
-    input_file = args[args.index('-f') + 1]
+    input_file = args[args.index('--file') + 1]
 except:
-	print 'You must specify filename'
+	print 'You must to specify filename'
 	sys.exit()
 
 try:
-    arg_time_from = args[args.index('-from') + 1].split(':')[:2]
+    arg_time_from = args[args.index('--from') + 1].split(':')[:2]
     time_from = datetime.time(int(arg_time_from[0]), int(arg_time_from[-1]))
     flag_from = True
 except:
     pass
 
 try:
-    arg_to_time = args[args.index('-to') + 1].split(':')[:2]
+    arg_to_time = args[args.index('--to') + 1].split(':')[:2]
     to_time = datetime.time(int(arg_to_time[0]), int(arg_to_time[-1]))
     flag_to = True
 except:
@@ -85,7 +85,7 @@ with gzip.open(input_file) as file:
 
 
 if flag_to or flag_from:
-	print time_from, to_time
+	print 'From time: ', time_from, ' To time: ', to_time
 
 print 'Count of users: ', len(ip_list)
 
