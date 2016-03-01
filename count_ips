@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 """ 
 Module destinated for determining a count of users, who visited site in specified time
     from nginx logs.
