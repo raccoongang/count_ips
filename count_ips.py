@@ -28,10 +28,10 @@ args = sys.argv
 time_from = datetime.time(0, 0)
 to_time = datetime.time(23, 59, 59)
 ip_list = []
-EXCEPTED_IPS = [
+EXCEPTED_IPS = (
     '127.0.0.1', # localhost 
     '82.117.232.99' # our ip
-    ]
+    )
 
 template_for_time = '(?<=:)\d{2}\:\d{2}'
 template_for_ip = '\d+\.\d+\.\d+\.\d+'
