@@ -60,7 +60,7 @@ except:
 try:
     arg_to_time = args[args.index('-to') + 1].split(':')[:2]
     to_time = datetime.time(int(arg_to_time[0]), int(arg_to_time[-1]))
-    flag_for = True
+    flag_to = True
 except:
     pass
 
