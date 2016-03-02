@@ -41,14 +41,14 @@ template_for_ip = '\d+\.\d+\.\d+\.\d+'
 flag_from = flag_to = False
 
 if len(args) == 1 or '--help' in args:
-	print __doc__
-	sys.exit()
+    print __doc__
+    sys.exit()
 
 try:
     input_file = args[args.index('--file') + 1]
 except:
-	print 'You must to specify filename'
-	sys.exit()
+    print 'You must to specify filename'
+    sys.exit()
 
 try:
     arg_time_from = args[args.index('--from') + 1].split(':')[:2]
@@ -85,11 +85,11 @@ with gzip.open(input_file) as file:
 
 
 if flag_to or flag_from:
-	print 'From time: ', time_from, ' To time: ', to_time
+    print 'From time: ', time_from, ' To time: ', to_time
 
 print 'Count of users: ', len(ip_list)
 
 if '--show-ip' in args:
-	print 'Ips:'
-	for ip in ip_list:
-	    print ip
+    print 'Ips:'
+    for ip in ip_list:
+        print ip
