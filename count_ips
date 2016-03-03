@@ -5,7 +5,8 @@ Module destinated for determining a count of users, who visited site in specifie
     from nginx logs.
 
 You must specify args:
-    --file - file (gz format)
+    --file - file (gz format), if you want to pass more then one file, follow this example:
+         --file 'file1 file2 file3'
     --to - to time HH:MM
     --from - time from HH:MM
     --show-ip - shows list of ips
@@ -39,20 +40,22 @@ template_for_time = '(?<=:)\d{2}\:\d{2}'
 template_for_ip = '\d+\.\d+\.\d+\.\d+'
 
 flag_from = flag_to = False
+n_item = 0
 
 if len(args) == 1 or '--help' in args:
     print __doc__
     sys.exit()
 
 try:
-    input_file = args[args.index('--file') + 1]
+    input_files = args[args.index('--file') + 1].split(' ')
+    count_of_files = len(input_files) if len(input_files) > 1 else None
 except:
     print 'You must to specify filename'
     sys.exit()
 
 try:
     arg_time_from = args[args.index('--from') + 1].split(':')[:2]
-    time_from = datetime.time(int(arg_time_from[0]), int(arg_time_from[-1]))
+    time_from = _time_from = datetime.time(int(arg_time_from[0]), int(arg_time_from[-1]))
     flag_from = True
 except:
     pass
@@ -75,17 +78,26 @@ def check_time(row, t_from, t_to):
 search = lambda template: re.search(template_for_ip, template).group()
 
 
-with gzip.open(input_file) as file:
-    lines = file.readlines()
-    for row in lines:
-        if not search(row) in ip_list and search(row) not in EXCEPTED_IPS and check_time(row, time_from, to_time):
-            ip_list.append(search(row))
-        else:
-            continue
+for input_file in input_files:
+    local_to_time = datetime.time(0, 0)
+    if count_of_files and n_item == count_of_files -1:
+        local_to_time = to_time
+    else:
+        local_to_time = to_time
+    with gzip.open(input_file) as file:
+        lines = file.readlines()
+        for row in lines:
+            if not search(row) in ip_list and search(row) not in EXCEPTED_IPS and check_time(row, time_from, local_to_time):
+                ip_list.append(search(row))
+            else:
+                continue
+    if count_of_files:
+        time_from = datetime.time(0, 0)
+        n_item += 1
 
 
 if flag_to or flag_from:
-    print 'From time: ', time_from, ' To time: ', to_time
+    print 'From time: ', _time_from, ' To time: ', to_time
 
 print 'Count of users: ', len(ip_list)
 
